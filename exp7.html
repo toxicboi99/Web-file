@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cookie Handling</title>
+<script>
+    function setCookie() {
+        var cookieName = prompt("Enter the cookie name:");
+        if (!cookieName) return; 
+        var cookieValue = prompt("Enter the cookie value:");
+        if (!cookieValue) return; 
+        var expirationDays = parseInt(prompt("Enter the number of days until expiration:"));
+        if (isNaN(expirationDays) || expirationDays <= 0) {
+            alert("Please enter a valid number of days.");
+            return;
+        }
+        var d = new Date();
+        d.setTime(d.getTime() + (expirationDays * 24 * 60 * 60 * 1000));
+        var expires = "expires=" + d.toUTCString();
+        document.cookie = cookieName + "=" + cookieValue + ";" + expires + ";path=/";
+        alert("Cookie set successfully!");
+    }
+
+    function showCookies() {
+        var cookiesString = "<h3>Cookies:</h3><ul>";
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            var cookieParts = cookie.split('=');
+            var cookieName = cookieParts[0];
+            var cookieValue = cookieParts.slice(1).join('=');
+            if (cookieName && cookieValue) {
+                cookiesString += "<li><strong>" + cookieName + ":</strong> " + cookieValue + "</li>";
+            }
+        }
+        cookiesString += "</ul>";
+        document.getElementById("cookieList").innerHTML = cookiesString;
+    }
+
+    function deleteCookie() {
+        var cookieName = prompt("Enter the cookie name:");
+        if (!cookieName) return;
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        alert("Cookie deleted successfully!");
+        showCookies();
+    }
+</script>
+</head>
+<body>
+
+<h2>Cookie Handling</h2>
+
+<button onclick="setCookie()">Set Cookie</button>
+<button onclick="showCookies()">Show Cookies</button>
+<button onclick="deleteCookie()">Delete Cookie</button>
+
+<div id="cookieList"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        showCookies();
+    });
+</script>
+
+</body>
+</html>
